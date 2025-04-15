@@ -1,0 +1,22 @@
+databases:
+  - name: mysql-db
+    databaseName: gestion_chantiers_db
+    user: gestion_user
+
+services:
+  - type: web
+    name: laravel-gestion-chantiers
+    env: php
+    buildCommand: "composer install && php artisan config:cache && php artisan migrate --force"
+    startCommand: "php artisan serve --host=0.0.0.0 --port $PORT"
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        generateValue: true
+      - fromDatabase:
+          name: mysql-db
+          property: connectionString
+          key: DATABASE_URL
