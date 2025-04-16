@@ -1,22 +1,24 @@
-databases:
-  - name: mysql-db
-    databaseName: gestion_chantiers_db
-    user: gestion_user
-
 services:
   - type: web
-    name: laravel-gestion-chantiers
+    name: gestion-chantiers
     env: php
-    buildCommand: "composer install && php artisan config:cache && php artisan migrate --force"
-    startCommand: "php artisan serve --host=0.0.0.0 --port $PORT"
+    buildCommand: "composer install --optimize-autoloader --no-dev && php artisan config:cache && php artisan migrate --force"
+    startCommand: "php -S 0.0.0.0:10000 -t public"
+    plan: free
     envVars:
       - key: APP_ENV
         value: production
-      - key: APP_DEBUG
-        value: false
       - key: APP_KEY
         generateValue: true
-      - fromDatabase:
-          name: mysql-db
-          property: connectionString
-          key: DATABASE_URL
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        value: ton-hôte-mysql.render.com
+      - key: DB_PORT
+        value: 3306
+      - key: DB_DATABASE
+        value: gestion_chantiers_db
+      - key: DB_USERNAME
+        value: ton_user
+      - key: DB_PASSWORD
+        value: ton_mdp
